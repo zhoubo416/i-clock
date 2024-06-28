@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文创时钟</title>
+    <meta name="description" content="养生、国粹、传统、国学时钟;创意时钟设计与制作">
+    
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f0e6e6;
+            font-family: Arial, sans-serif;
+        }
+        .clock {
+            width: 700px;
+            height: 700px;
+            border: 20px solid #8B0000;
+            border-radius: 50%;
+            position: relative;
+            background: radial-gradient(circle, #ffffff, #f5f0f0);
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+        }
+        .image {            
+            background-image: url('/Users/mac/Pictures/clock.jpeg');
+            background-size: cover; /* 根据需要调整背景图片的大小 */
+            background-position: center; /* 设置背景图片的位置 */
+            background-repeat: no-repeat; /* 防止背景图片重复 */
+            height: 100%;
+            width: 100%;
+            border-radius: 50%;
+        }
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: 50% 100%;
+            z-index: 10;
+        }
+        .hour {
+            width: 12px;
+            height: 30%;
+            background: #333;
+        }
+        .minute {
+            width: 8px;
+            height: 40%;
+            background: #555;
+        }
+        .second {
+            width: 4px;
+            height: 45%;
+            background: #8B0000;
+        }
+        .center-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #8B0000;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 11;
+        }
+        .number, .organ {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform-origin: 0 0;
+        }
+        .number span {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+        }
+        .organ span {
+            font-size: 24px;
+            color: #8B0000;
+            font-weight: bold;
+        }
+        .organ-detail {
+            font-size: 14px;
+            color: #666;
+            display: block;
+            text-align: center;
+        }
+        .minute-line {
+            position: absolute;
+            width: 2px;
+            height: 15px;
+            background: #999;
+            left: 50%;
+            transform-origin: 50% 300px;
+        }
+        .digital-clock {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 28px;
+            color: #8b0000;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock" id="c1">
+        <div class="image">
+            <div class="hand hour"></div>
+            <div class="hand minute"></div>
+            <div class="hand second"></div>
+            <div class="center-dot"></div>
+            <div class="digital-clock" id="digitalClock"></div>
+        </div>
+    </div>
+
+    <script>
+        const clock = document.querySelector('.clock');
+        const hourHand = document.querySelector('.hour');
+        const minuteHand = document.querySelector('.minute');
+        const secondHand = document.querySelector('.second');
+        const digitalClock = document.getElementById('digitalClock');
+
+        const numbers = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+        function createClockFace() {
+            const radius = 320;
+            const organRadius = 220;
+
+            // Create minute lines
+            // for (let i = 0; i < 60; i++) {
+            //     const line = document.createElement('div');
+            //     line.className = 'minute-line';
+            //     line.style.transform = `rotate(${i * 6}deg)`;
+            //     if (i % 5 === 0) {
+            //         line.style.height = '25px';
+            //         line.style.width = '4px';
+            //     }
+            //     clock.appendChild(line);
+            // }
+
+            // numbers.forEach((num, index) => {
+            //     const angle = (index * 30 - 90) * (Math.PI / 180);
+            //     const x = radius * Math.cos(angle);
+            //     const y = radius * Math.sin(angle);
+
+            //     const numberEl = document.createElement('div');
+            //     numberEl.className = 'number';
+            //     numberEl.style.transform = `translate(${x}px, ${y}px)`;
+            //     numberEl.innerHTML = `<span>${num}</span>`;
+            //     clock.appendChild(numberEl);
+            // });
+
+            // organs.forEach((organ, index) => {
+            //     const angle = (index * 30 - 75) * (Math.PI / 180);
+            //     const x = organRadius * Math.cos(angle);
+            //     const y = organRadius * Math.sin(angle);
+
+            //     const organEl = document.createElement('div');
+            //     organEl.className = 'organ';
+            //     organEl.style.transform = `translate(${x}px, ${y}px)`;
+            //     organEl.innerHTML = `<span>${organ.name}</span><span class="organ-detail">${organ.detail}</span>`;
+            //     clock.appendChild(organEl);
+            // });
+        }
+
+        function setTime() {
+            const now = new Date();
+            const seconds = now.getSeconds();
+            const minutes = now.getMinutes();
+            const hours = now.getHours() % 12;
+            const digitalHours = String(now.getHours()).padStart(2, '0');
+            const digitalMinutes = String(now.getMinutes()).padStart(2, '0');
+            const digitalSeconds = String(now.getSeconds()).padStart(2, '0');
+            const timeString = `${digitalHours}:${digitalMinutes}:${digitalSeconds}`;
+
+            secondHand.style.transform = `translateX(-50%) rotate(${seconds * 6}deg)`;
+            minuteHand.style.transform = `translateX(-50%) rotate(${minutes * 6 + seconds * 0.1}deg)`;
+            hourHand.style.transform = `translateX(-50%) rotate(${hours * 30 + minutes * 0.5}deg)`;
+            digitalClock.textContent = timeString;
+        }
+
+        createClockFace();
+        setInterval(setTime, 1000);
+        setTime();
+    </script>
+</body>
+</html>
