@@ -25,8 +25,18 @@
             background: radial-gradient(circle, #ffffff, #f5f0f0);
             box-shadow: 0 0 30px rgba(0,0,0,0.1);
         }
+        @media (max-width: 700px) {
+            .clock {
+            width: 400px;
+            height: 400px;
+            border: 10px solid #8B0000;
+            border-radius: 50%;
+            position: relative;
+            background: radial-gradient(circle, #ffffff, #f5f0f0);
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+        }
+        }
         .image {            
-            background-image: url('/Users/mac/Pictures/clock.jpeg');
             background-size: cover; /* 根据需要调整背景图片的大小 */
             background-position: center; /* 设置背景图片的位置 */
             background-repeat: no-repeat; /* 防止背景图片重复 */
@@ -109,16 +119,25 @@
             border-radius: 5px;
             border: 1px solid;
         }
+        .button{
+            position: fixed;
+            top:40px;
+            right:40px
+        }
     </style>
 </head>
 <body>
     <div class="clock" id="c1">
-        <div class="image">
+        <div class="image" style="background-image: url('./clock.jpeg');">
             <div class="hand hour"></div>
             <div class="hand minute"></div>
             <div class="hand second"></div>
             <div class="center-dot"></div>
             <div class="digital-clock" id="digitalClock"></div>
+        </div>
+        <div class="button">
+            <button onclick="changeImage()">切换</button>
+            <button onclick="showPrompt()">自定义图片</button>
         </div>
     </div>
 
@@ -191,6 +210,37 @@
         createClockFace();
         setInterval(setTime, 1000);
         setTime();
+
+        const images = ['url("./clock.jpeg")', 'url("./clock3.png")']
+        function changeImage(){
+            const currentImage = document.getElementsByClassName('image')[0].style.backgroundImage;
+            const idx = images.indexOf(currentImage)
+            document.getElementsByClassName('image')[0].style.backgroundImage=images[(idx+1)%2]
+            loadContent()
+        }
+        function showPrompt() {
+            var userInput = prompt("请输入图片的URL：");
+            console.log(userInput, 'userInput');
+            if (userInput) {
+                document.getElementsByClassName('image')[0].style.backgroundImage='url('+userInput+')'
+                loadContent()
+            } else {
+                alert('您没有输入任何内容！')
+            }
+        }
+
+        function loadContent() {
+            const currentImage = document.getElementsByClassName('image')[0].style.backgroundImage
+            localStorage.setItem('currentImage', currentImage);
+
+        }
+        function initImage(){
+            var currentImage = localStorage.getItem('currentImage');
+            if(currentImage){
+                document.getElementsByClassName('image')[0].style.backgroundImage=currentImage
+            }
+        }
+        initImage()
     </script>
 </body>
 </html>
