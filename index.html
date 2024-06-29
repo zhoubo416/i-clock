@@ -121,12 +121,29 @@
         }
         .button{
             position: fixed;
+            top:20px;
+            right:20px
+        }
+        .calendar{
+            position: fixed;
             top:40px;
+            left:40px
+        }
+        .top-left{
+            position: fixed;
+            top:60px;
             right:40px
         }
     </style>
 </head>
 <body>
+
+    <object id="calendar" class="calendar" type="text/html" data="https://mobile.51wnl-cq.com/huangli_tab_h5/?posId=BDSS&STIME=2024-06-20" width="300px" height="750px">
+        您的浏览器不支持object标签。
+    </object>
+    <object id="top-left" class="top-left" type="text/html" data="https://top.baidu.com/board?tab=realtime" width="300px" height="750px">
+        您的浏览器不支持object标签。
+    </object>
     <div class="clock" id="c1">
         <div class="image" style="background-image: url('./clock.jpeg');">
             <div class="hand hour"></div>
@@ -241,6 +258,31 @@
             }
         }
         initImage()
+
+        function currentDay(){
+            var date = new Date();
+            var formattedDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
+            return formattedDate
+        }
+        document.getElementById('calendar').data = 'https://mobile.51wnl-cq.com/huangli_tab_h5/?posId=BDSS&STIME='+currentDay()
+
+        // 跨越无法使用
+        // window.onload = function() {
+        //     var object = document.getElementById('calendar');
+        //     console.log(object, 'ob');
+        //     var contentDocument = object.contentDocument || object.contentWindow.document;
+ 
+        //     // 等待object内容加载完成
+        //     contentDocument.onreadystatechange = function() {
+        //         if (this.readyState == 'complete') {
+        //             // 修改object引入页面的样式
+        //             contentDocument.body.style.backgroundColor = 'yellow';
+        //             var stylesheet = contentDocument.createElement('style');
+        //             stylesheet.innerHTML = 'h1 { color: red; }'; // 修改h1标签的颜色
+        //             contentDocument.head.appendChild(stylesheet);
+        //         }
+        //     };
+        // };
     </script>
 </body>
 </html>
